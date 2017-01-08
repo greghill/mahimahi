@@ -18,12 +18,10 @@ void VarDelayQueue::read_packet( const string & contents )
         cur_delay_ms_ -= step_;
     }
 
-
     cur_delay_ms_ = min(cur_delay_ms_, (double) max_delay_ms_);
     cur_delay_ms_ = max(cur_delay_ms_, (double) min_delay_ms_);
 
     uint64_t var_delay_ms = cur_delay_ms_;
-    cerr << var_delay_ms << endl;
     packet_queue_.emplace( timestamp() + var_delay_ms, contents );
 }
 
