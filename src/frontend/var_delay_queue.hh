@@ -15,7 +15,7 @@ class VarDelayQueue
 private:
     const uint64_t min_delay_ms_;
     const uint64_t max_delay_ms_;
-    const double step_ = .1;
+    const double step_;
     double cur_delay_ms_;
 
     std::default_random_engine prng_;
@@ -25,7 +25,7 @@ private:
     /* release timestamp, contents */
 
 public:
-    VarDelayQueue( const uint64_t & min_delay_ms, const uint64_t & max_delay_ms ) : min_delay_ms_( min_delay_ms ), max_delay_ms_( max_delay_ms ), cur_delay_ms_( (min_delay_ms+max_delay_ms)/2 ), prng_( std::random_device()() ), dist_( 0, 1 ), packet_queue_() {}
+    VarDelayQueue( const uint64_t & min_delay_ms, const uint64_t & max_delay_ms, const double & step ) : min_delay_ms_( min_delay_ms ), max_delay_ms_( max_delay_ms ), step_( step ), cur_delay_ms_( (min_delay_ms+max_delay_ms)/2 ), prng_( std::random_device()() ), dist_( 0, 1 ), packet_queue_() {}
 
     void read_packet( const std::string & contents );
 
