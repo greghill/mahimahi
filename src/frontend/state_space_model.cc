@@ -2,7 +2,7 @@
 #include <Eigen/Dense>
 
 // (throughput, delay) pairs
-std::pair<double, double> StateSpaceModel::query( std::deque<std::pair<double, double>> &/*previous_state*/ )
+std::pair<double, uint64_t> StateSpaceModel::query( std::deque<std::pair<double, uint64_t>> &/*previous_state*/ )
 {
-    return { 0, 20 };
+    return { 5, 20 };
 }

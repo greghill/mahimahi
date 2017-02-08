@@ -17,9 +17,11 @@ class StateSpaceQueue
 private:
     uint64_t bin_start_ms_ = 0;
     uint64_t bin_size_ = 50;
-    double cur_bin_delay_ = 0;
+
+    uint64_t cur_bin_delay_ = 20;
     uint64_t cur_bin_bytes_sent_ = 0;
-    std::deque< std::pair<double, double> > past_bins_;
+
+    std::deque< std::pair<double, uint64_t> > past_bins_;
 
     StateSpaceModel model_;
     std::queue< std::pair<uint64_t, std::string> > packet_queue_;
@@ -27,7 +29,7 @@ private:
 
 public:
     StateSpaceQueue( int ) : model_(), packet_queue_() {
-        const std::pair<double, double> default_fill(5., 5.);
+        const std::pair<double, uint64_t> default_fill(5., 20);
         for (auto i = 0; i < 15; i++) {
             past_bins_.emplace_back(default_fill);
         }
