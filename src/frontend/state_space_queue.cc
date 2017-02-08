@@ -1,6 +1,8 @@
 /* -*-mode:c++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
 #include <limits>
+#include <iostream>
+#include <algorithm>
 
 #include "state_space_queue.hh"
 #include "timestamp.hh"
@@ -14,7 +16,14 @@ void StateSpaceQueue::read_packet( const string & contents )
         double bin_megabits = double(cur_bin_bytes_sent_ * 8) / (1024. * 1024.);
         double bin_mbps = (bin_megabits * 1000.) / double(bin_size_);
 
-        past_bins_.emplace(std::pair<double, double>(cur_bin_delay_, bin_mbps)); // back?
+        past_bins_.emplace_back(std::pair<double, double>(cur_bin_delay_, bin_mbps));
+        past_bins_.pop_front(); // drop oldest value
+
+        cerr << "[";
+        for( const auto & x : past_bins_ ) {
+            cerr << "( " << x.first << ", " << x.first << "), ";
+        }
+        cerr << "]" << endl;
 
         std::pair<double, double> tput_delay_pair = model_.query( past_bins_ );
         cur_bin_delay_ = tput_delay_pair.second;
