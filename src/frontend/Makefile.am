@@ -41,6 +41,11 @@ mm_replayserver_SOURCES = replayserver.cc
 mm_replayserver_LDADD = -lrt ../util/libutil.a ../http/libhttp.a ../protobufs/libhttprecordprotos.a $(protobuf_LIBS)
 mm_replayserver_LDFLAGS = -pthread
 
+bin_PROGRAMS += mm-statespace
+mm_statespace_SOURCES = state_space_shell.cc state_space_queue.hh state_space_queue.cc state_space_model.hh state_space_model.cc
+mm_statespace_LDADD = -lrt ../util/libutil.a ../packet/libpacket.a
+mm_statespace_LDFLAGS = -pthread
+
 lib_LTLIBRARIES = libmod_deepcgi.la
 libmod_deepcgi_la_SOURCES = mod_deepcgi.c replayserver_filename.cc
 libmod_deepcgi_la_CFLAGS = -I@APACHE2_INCLUDE@ $(libapr1_CFLAGS)
@@ -61,3 +66,5 @@ install-exec-hook:
 	chmod u+s $(DESTDIR)$(bindir)/mm-webrecord
 	chown root $(DESTDIR)$(bindir)/mm-webreplay
 	chmod u+s $(DESTDIR)$(bindir)/mm-webreplay
+	chown root $(DESTDIR)$(bindir)/mm-statespace
+	chmod u+s $(DESTDIR)$(bindir)/mm-statespace
