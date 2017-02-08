@@ -45,6 +45,7 @@ bin_PROGRAMS += mm-statespace
 mm_statespace_SOURCES = state_space_shell.cc state_space_queue.hh state_space_queue.cc state_space_model.hh state_space_model.cc
 mm_statespace_LDADD = -lrt ../util/libutil.a ../packet/libpacket.a
 mm_statespace_LDFLAGS = -pthread
+mm_statespace_CXXFLAGS = -I/usr/include/eigen3
 
 lib_LTLIBRARIES = libmod_deepcgi.la
 libmod_deepcgi_la_SOURCES = mod_deepcgi.c replayserver_filename.cc
