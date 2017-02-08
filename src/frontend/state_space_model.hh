@@ -4,13 +4,12 @@
 #define STATE_SPACE_MODEL
 
 #include <utility>
+#include <vector>
 
 class StateSpaceModel
 {
 public:
-    void update( double throughput, double delay );
-
-    std::pair<double, double> query( );
+    std::pair<double, double> query( std::vector<std::pair<double, double>> &previous_state );
 };
 
 #endif /* STATE_SPACE_MODEL */ 

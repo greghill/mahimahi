@@ -1,13 +1,7 @@
 #include "state_space_model.hh"
 
-void StateSpaceModel::update( double throughput, double delay )
+// (throughput, delay) pairs
+std::pair<double, double> StateSpaceModel::query( std::vector<std::pair<double, double>> &/*previous_state*/ )
 {
-    throughput += 1;
-    delay += 1;
-    return;
-}
-
-std::pair<double, double> StateSpaceModel::query( )
-{
-    return {0,0};
+    return { 0, 20 };
 }
