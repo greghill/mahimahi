@@ -4,12 +4,12 @@
 #define STATE_SPACE_MODEL
 
 #include <utility>
-#include <vector>
+#include <queue>
 
 class StateSpaceModel
 {
 public:
-    std::pair<double, double> query( std::vector<std::pair<double, double>> &previous_state );
+    std::pair<double, double> query( std::queue<std::pair<double, double>> &previous_state );
 };
 
 #endif /* STATE_SPACE_MODEL */ 

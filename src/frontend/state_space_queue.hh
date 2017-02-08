@@ -13,12 +13,18 @@
 class StateSpaceQueue
 {
 private:
+    uint64_t bin_start_ms_ = 0;
+    uint64_t bin_size_ = 50;
+    double cur_bin_delay_ = 0;
+    uint64_t cur_bin_bytes_sent_ = 0;
+    std::queue< std::pair<double, double> > past_bins_;
+
     StateSpaceModel model_;
     std::queue< std::pair<uint64_t, std::string> > packet_queue_;
     /* release timestamp, contents */
 
 public:
-    StateSpaceQueue( int ) : model_(), packet_queue_() {}
+    StateSpaceQueue( int ) : past_bins_(), model_(), packet_queue_() {}
 
     void read_packet( const std::string & contents );
 

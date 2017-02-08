@@ -9,11 +9,27 @@ using namespace std;
 
 void StateSpaceQueue::read_packet( const string & contents )
 {
-    packet_queue_.emplace( timestamp() + 20, contents );
+    uint64_t cur_time = timestamp();
+    if (cur_time > (bin_start_ms_ + bin_size_)) {
+        double bin_megabits = double(cur_bin_bytes_sent_ * 8) / (1024. * 1024.);
+        double bin_mbps = (bin_megabits * 1000.) / double(bin_size_);
+
+        past_bins_.emplace(std::pair<double, double>(cur_bin_delay_, bin_mbps)); // back?
+
+        std::pair<double, double> tput_delay_pair = model_.query( past_bins_ );
+        cur_bin_delay_ = tput_delay_pair.second;
+        cur_bin_bytes_sent_ = 0;
+    }
+
+    // if not dropping packet
+    cur_bin_bytes_sent_ += contents.size();
+
+    packet_queue_.emplace( cur_time + cur_bin_delay_, contents );
 }
 
 void StateSpaceQueue::write_packets( FileDescriptor & fd )
 {
+    // WILL NOT RE-ORDER packets
     while ( (!packet_queue_.empty())
             && (packet_queue_.front().first <= timestamp()) ) {
         fd.write( packet_queue_.front().second );
