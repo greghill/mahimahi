@@ -13,4 +13,4 @@ public:
     std::pair<double, uint64_t> query( std::deque<std::pair<double, uint64_t>> &previous_state );
 };
 
-#endif /* STATE_SPACE_MODEL */ 
+#endif /* STATE_SPACE_MODEL */
