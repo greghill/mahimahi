@@ -13,11 +13,10 @@ void StateSpaceQueue::read_packet( const string & contents )
 {
     uint64_t cur_time = timestamp();
     //cerr << contents.size() << "@ " << cur_time << endl;
-    if (cur_time > (bin_start_ms_ + bin_size_)) {
-        double bin_megabits = double(cur_bin_bytes_sent_ * 8) / (1024. * 1024.);
-        double bin_mbps = (bin_megabits * 1000.) / double(bin_size_);
 
-        past_bins_.emplace_back(std::pair<double, double>(bin_mbps, cur_bin_delay_));
+    // add bins that have passed
+    while (cur_time > (cur_bin_ms_ + bin_size_ms_)) {
+        past_bins_.emplace_back(std::pair<double, double>(cur_bin_mbps_, cur_bin_delay_));
         past_bins_.pop_front(); // drop oldest value
 
         /*
@@ -30,11 +29,13 @@ void StateSpaceQueue::read_packet( const string & contents )
 
         std::pair<double, uint64_t> tput_delay_pair = model_.query( past_bins_ );
         cur_bin_delay_ = tput_delay_pair.second;
-        cur_bin_bytes_sent_ = 0;
+        cur_bin_mbps_ = 0;
+        cur_bin_ms_ += bin_size_ms_;
     }
 
     // if not dropping packet
-    cur_bin_bytes_sent_ += contents.size();
+
+    cur_bin_mbps_ += double(contents.size() * 8 * 1000) / double(bin_size_ms_ * 1024 * 1024);
 
     packet_queue_.emplace( cur_time + cur_bin_delay_, contents );
 }
